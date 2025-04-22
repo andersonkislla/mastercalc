@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Procedimentos por Marca</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Montadoras</h1>
+    </div>
+
+    <div class="card">
+      <h2>Selecione uma Montadora</h2>
+      <div id="brands" class="procedures"></div>
+    </div>
+
+    <div class="card fade-in" id="procedures-container" style="display:none">
+      <h2 id="brand-title">Procedimentos</h2>
+      <div id="procedures" class="procedures"></div>
+    </div>
+  </div>
+
+  <script>
+    const brandsContainer = document.getElementById('brands');
+    const proceduresContainer = document.getElementById('procedures-container');
+    const proceduresList = document.getElementById('procedures');
+    const brandTitle = document.getElementById('brand-title');
+
+    async function loadBrands() {
+      try {
+        const res = await fetch('/api/procedures/brands');
+        const brands = await res.json();
+
+        brands.forEach(brand => {
+          const card = document.createElement('div');
+          card.className = 'procedure-card';
+          card.innerHTML = `<h3>${brand}</h3>`;
+          card.onclick = () => loadProceduresByBrand(brand);
+          brandsContainer.appendChild(card);
+        });
+      } catch (err) {
+        console.error('Erro ao carregar marcas:', err);
+      }
+    }
+
+    async function loadProceduresByBrand(brand) {
+      try {
+        const res = await fetch(`/api/procedures/by-brand/${encodeURIComponent(brand)}`);
+        const procedures = await res.json();
+
+        brandTitle.textContent = `Procedimentos da ${brand}`;
+        proceduresContainer.style.display = 'block';
+        proceduresList.innerHTML = '';
+
+        procedures.forEach(proc => {
+          const card = document.createElement('div');
+          card.className = 'procedure-card';
+          card.innerHTML = `
+            <h3>${proc.title}</h3>
+            <p>${proc.description}</p>
+            <pre>${proc.procedure_script.substring(0, 200)}...</pre>
+          `;
+          proceduresList.appendChild(card);
+        });
+      } catch (err) {
+        console.error('Erro ao buscar procedimentos:', err);
+      }
+    }
+
+    loadBrands();
+  </script>
+</body>
+</html>

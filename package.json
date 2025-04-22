@@ -1,0 +1,22 @@
+{
+  "name": "hex-editor-api",
+  "version": "1.0.0",
+  "description": "API para editar e gerenciar procedimentos",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^16.5.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.2"
+  },
+  "engines": {
+    "node": ">=14.x.x"
+  },
+  "author": "Seu Nome",
+  "license": "ISC"
+}
